@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Home page</title>
+
+  <script src="https://kit.fontawesome.com/47101d2035.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <style>
+    .center {
+      position: absolute;
+      text-align: center;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: rgb(230, 239, 245);
+    }
+  </style>
+</head>
+
+
+<body class="center">
+
+  <h1 style="color:rgb(44, 44, 90); font-weight: 700;">
+    {% comment %} <h1 style="color:yellow; font-weight:700;"> {% endcomment %}
+    <i class="fas fa-ship"></i> Titanic Survival Predictor
+  </h1>
+
+  <p style="color:rgb(51, 51, 83); font-weight: 700;">
+    Can a passenger with your given characteristics survive?
+  </p>
+
+  <form action="result" method=='GET' autocomplete='off'>
+    {% csrf_token %}
+
+    <div class="form-group">
+      <input class="form-control" placeholder="The ticket of passenger purchased (1st, 2nd, or 3rd class)" required type="value" name="pclass">
+    </div>
+
+
+    <div class="form-group">
+      <input class="form-control" placeholder="The Gender of passenger(0 for Male, 1 for Female)" required type="value" name="sex">
+    </div>
+
+
+    <div class="form-group">
+      <input class="form-control" placeholder="The Age of passenger" required type="value" name="age">
+    </div>
+
+
+    <div class="form-group">
+      <input class="form-control" placeholder="No. of Sibling(s) or Spouse(s)" required type="value" name="sibsp">
+    </div>
+
+
+    <div class="form-group">
+      <input class="form-control" placeholder="Parch(number of parents or children the passenger had on board)" type="value" required name="parch">
+    </div>
+
+
+    <div class="form-group">
+      <input class="form-control" placeholder="Ticket Fare of the passenger" required type="value" name="fare">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" placeholder=" The port(Southampton(S,0),Cherbourg(C,1),Queenstown(Q,2))" required type="value" name="embC">
+    </div>
+
+
+    <input class="btn btn-primary btn-lg btn-block" type="submit" value='Predict'>
+
+  </form>
+</body>
+
+</html>
