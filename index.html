@@ -1,80 +1,222 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Home page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Predictor</title>
 
-  <script src="https://kit.fontawesome.com/47101d2035.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        :root {
+            --primary-color: #2c2c5a;
+            --secondary-color: #4a4a8a;
+            --accent-color: #0d6efd;
+            --background-color: #f8f9fa;
+        }
 
-  <style>
-    .center {
-      position: absolute;
-      text-align: center;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: rgb(230, 239, 245);
-    }
-  </style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1c92d2, #f2fcfe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .predictor-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-control {
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .btn-predict {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-tooltip {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .predictor-container {
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .header-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 
+<body>
+    <div class="predictor-container">
+        <div class="text-center">
+            <i class="fas fa-ship header-icon"></i>
+            <h1 class="title">Titanic Survival Predictor</h1>
+            <p class="subtitle">Discover your chances of survival based on passenger characteristics</p>
+        </div>
 
-<body class="center">
+        <form action="result" method="GET" autocomplete="off">
+            {% csrf_token %}
 
-  <h1 style="color:rgb(44, 44, 90); font-weight: 700;">
+            <div class="form-group">
+                <input class="form-control" placeholder="Passenger Class (1, 2, or 3)" required type="number" min="1" max="3" name="pclass">
+                <i class="fas fa-ticket-alt input-icon"></i>
+                <div class="form-tooltip">Enter the ticket class (1st, 2nd, or 3rd)</div>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Gender (0 for Male, 1 for Female)" required type="number" min="0" max="1" name="sex">
+                <i class="fas fa-venus-mars input-icon"></i>
+                <div class="form-tooltip">0 = Male, 1 = Female</div>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Age" required type="number" min="0" max="120" name="age">
+                <i class="fas fa-user input-icon"></i>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Number of Siblings/Spouses" required type="number" min="0" name="sibsp">
+                <i class="fas fa-users input-icon"></i>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Number of Parents/Children" required type="number" min="0" name="parch">
+                <i class="fas fa-child input-icon"></i>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Ticket Fare" required type="number" min="0" step="0.01" name="fare">
+                <i class="fas fa-dollar-sign input-icon"></i>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" placeholder="Embarkation Port (0-S, 1-C, 2-Q)" required type="number" min="0" max="2" name="embC">
+                <i class="fas fa-anchor input-icon"></i>
+                <div class="form-tooltip">Southampton(0), Cherbourg(1), Queenstown(2)</div>
+            </div>
+
+            <button type="submit" class="btn btn-predict btn-lg w-100">
+                <i class="fas fa-search me-2"></i>Predict Survival
+            </button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <i class="fas fa-ship"></i> Titanic Survival Predictor
-  </h1>
+    <!-- Custom JavaScript for form validation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input');
 
-  <p style="color:rgb(51, 51, 83); font-weight: 700;">
-    Can a passenger with your given characteristics survive?
-  </p>
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.validity.valid) {
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+            });
 
-  <form action="result" method=='GET' autocomplete='off'>
-    {% csrf_token %}
-
-    <div class="form-group">
-      <input class="form-control" placeholder="The ticket of passenger purchased (1st, 2nd, or 3rd class)" required type="value" name="pclass">
-    </div>
-
-
-    <div class="form-group">
-      <input class="form-control" placeholder="The Gender of passenger(0 for Male, 1 for Female)" required type="value" name="sex">
-    </div>
-
-
-    <div class="form-group">
-      <input class="form-control" placeholder="The Age of passenger" required type="value" name="age">
-    </div>
-
-
-    <div class="form-group">
-      <input class="form-control" placeholder="No. of Sibling(s) or Spouse(s)" required type="value" name="sibsp">
-    </div>
-
-
-    <div class="form-group">
-      <input class="form-control" placeholder="Parch(number of parents or children the passenger had on board)" type="value" required name="parch">
-    </div>
-
-
-    <div class="form-group">
-      <input class="form-control" placeholder="Ticket Fare of the passenger" required type="value" name="fare">
-    </div>
-
-    <div class="form-group">
-      <input class="form-control" placeholder=" The port(Southampton(S,0),Cherbourg(C,1),Queenstown(Q,2))" required type="value" name="embC">
-    </div>
-
-
-    <input class="btn btn-primary btn-lg btn-block" type="submit" value='Predict'>
-
-  </form>
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        });
+    </script>
 </body>
-
 </html>
